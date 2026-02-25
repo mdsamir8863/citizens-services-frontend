@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+/* 1. THEME VARIABLES (Saffron & White Theme) */
+@theme {
+    /* Primary Brand Colors (Authentic Saffron) */
+    --color-primary-50: #fff9f0;
+    --color-primary-100: #fff0d4;
+    --color-primary-200: #ffe0a8;
+    /* Yeh color missing tha! */
+    --color-primary-500: #ff9933;
+    /* Main Saffron */
+    --color-primary-600: #e68019;
+    /* Hover Saffron */
+    --color-primary-700: #cc6600;
+    --color-primary-900: #804000;
+
+    /* Neutral Dark Colors for Text */
+    --color-dark-800: #333333;
+    --color-dark-900: #1a1a1a;
+
+    /* Border Colors */
+    --color-border-light: #f8fafc;
+    --color-border-dark: #e2e8f0;
+}
+
+/* 2. REUSABLE COMPONENTS & UTILITIES */
+@layer components {
+    .page-wrapper {
+        @apply p-6 md:p-8 max-w-7xl mx-auto space-y-6;
+    }
+
+    .admin-card {
+        @apply bg-white rounded-xl shadow-sm border border-slate-200 p-6 transition-all;
+    }
+
+    .input-field {
+        @apply w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all outline-none bg-white text-slate-800;
+    }
+
+    .input-label {
+        @apply block text-sm font-semibold text-slate-700 mb-2;
+    }
+
+    .btn-primary {
+        @apply flex items-center justify-center gap-2 bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors shadow-sm cursor-pointer;
+    }
+
+    .btn-secondary {
+        @apply flex items-center justify-center gap-2 bg-white hover:bg-primary-50 text-primary-600 font-semibold py-2.5 px-4 rounded-lg transition-colors border border-primary-200 cursor-pointer;
+    }
+
+    .btn-danger {
+        @apply flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors shadow-sm cursor-pointer;
+    }
+}
