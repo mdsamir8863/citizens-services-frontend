@@ -4,6 +4,7 @@ import AdminLayout from '../layouts/AdminLayout'
 import ProtectedRoute from '../core/guards/ProtectedRoute'
 import RequireRole from '@/core/guards/RequireRole'
 
+
 // Dynamic Code Splitting for performance
 const AdminProfile = lazy(() => import('@/features/profile/pages/AdminProfile'))
 const SystemSettings = lazy(() => import('@/features/settings/pages/SystemSettings'))
@@ -14,6 +15,8 @@ const UserList = lazy(() => import('../features/users/pages/UserList'))
 const ServiceList = lazy(() => import('@/features/services/pages/ServiceList'))
 const ComplaintsSupport = lazy(() => import('@/features/complaints/pages/ComplaintsSupport'))
 const LiveChat = lazy(() => import('@/features/chat/pages/LiveChat'))
+const ComplaintsList = lazy(() => import('@/features/complaints/pages/ComplaintsList'))
+const TicketDetail = lazy(() => import('@/features/complaints/pages/TicketDetail'))
 
 // Suspense Fallback Loader
 const PageLoader = () => (
@@ -66,11 +69,24 @@ export const router = createBrowserRouter([
                     },
                     {
                         path: 'complaints',
-                        element: (
-                            <Suspense fallback={<PageLoader />}>
-                                <ComplaintsSupport />
-                            </Suspense>
-                        ),
+                        children: [
+                            {
+                                index: true, // Jab admin sirf /complaints par aayega to List khulegi
+                                element: (
+                                    <Suspense fallback={<PageLoader />}>
+                                        <ComplaintsList />
+                                    </Suspense>
+                                ),
+                            },
+                            {
+                                path: ':ticketId', // Jab admin /complaints/CMP-1029 par jayega to Detail View khulega
+                                element: (
+                                    <Suspense fallback={<PageLoader />}>
+                                        <TicketDetail />
+                                    </Suspense>
+                                ),
+                            }
+                        ]
                     },
                     {
                         path: 'chat',

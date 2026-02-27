@@ -25,7 +25,7 @@ const NAVIGATION_ITEMS = [
         allowedRoles: ['Super Admin', 'Admin']
     },
     {
-        name: 'Complaints',
+        name: 'Ticket Inbox',
         path: '/complaints',
         icon: AlertCircle,
         allowedRoles: ['Super Admin', 'Admin', 'Support Admin']

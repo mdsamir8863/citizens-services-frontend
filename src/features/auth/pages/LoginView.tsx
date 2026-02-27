@@ -40,7 +40,7 @@ export default function LoginView() {
                 user: {
                     adminId: 'ADM-9988',
                     email: email,
-                    adminRole: 'Support Admin' // Used for RBAC routing and based on this we are displaying the sidebar and profile access
+                    adminRole: 'Super Admin' // Used for RBAC routing and based on this we are displaying the sidebar and profile access
                 },
                 accessToken: 'mock_jwt_access_token_abc123'
             }))
