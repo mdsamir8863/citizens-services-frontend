@@ -18,44 +18,70 @@
 }
 
 /* 2. GLOBAL DARK MODE OVERRIDES */
-/* When .dark is active, we completely redefine Tailwind's default color palette */
 @layer base {
     .dark {
-        /* Swap Background Colors (Light becomes Dark) */
         --color-white: #0f172a;
-        /* slate-900 */
         --color-slate-50: #020617;
-        /* slate-950 */
         --color-slate-100: #1e293b;
-        /* slate-800 */
         --color-slate-200: #334155;
-        /* slate-700 */
         --color-slate-300: #475569;
-        /* slate-600 */
 
-        /* Swap Text Colors (Dark becomes Light) */
         --color-slate-900: #ffffff;
-        /* white */
         --color-slate-800: #f8fafc;
-        /* slate-50 */
         --color-slate-700: #f1f5f9;
-        /* slate-100 */
         --color-slate-600: #e2e8f0;
-        /* slate-200 */
         --color-slate-500: #94a3b8;
-        /* slate-400 */
         --color-slate-400: #64748b;
-        /* slate-500 */
 
-        /* Adjust Primary light backgrounds so they don't blind the user in dark mode */
         --color-primary-50: #1e293b;
-        /* Dark subtle background instead of bright saffron */
         --color-primary-100: #334155;
     }
 }
 
-/* 3. REUSABLE COMPONENTS & UTILITIES */
+/* 3. CUSTOM ANIMATIONS */
+@layer utilities {
+
+    @keyframes toastIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.8) translateY(30px);
+        }
+
+        60% {
+            opacity: 1;
+            transform: scale(1.03) translateY(-4px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    @keyframes toastOut {
+        0% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        100% {
+            opacity: 0;
+            transform: scale(0.85) translateY(20px);
+        }
+    }
+
+    .animate-toast-in {
+        animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-toast-out {
+        animation: toastOut 0.25s ease-in forwards;
+    }
+}
+
+/* 4. REUSABLE COMPONENTS */
 @layer components {
+
     .page-wrapper {
         @apply p-6 md:p-8 max-w-7xl mx-auto space-y-6;
     }
@@ -82,5 +108,15 @@
 
     .btn-danger {
         @apply flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors shadow-sm cursor-pointer;
+    }
+
+    /* Toast Component Styling */
+
+    .toast-container {
+        @apply fixed inset-0 flex items-center justify-center z-[9999] pointer-events-none;
+    }
+
+    .toast-card {
+        @apply flex items-center gap-3 px-6 py-4 rounded-2xl border shadow-2xl backdrop-blur-md min-w-[320px] pointer-events-auto font-semibold text-sm;
     }
 }

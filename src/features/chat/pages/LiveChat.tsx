@@ -11,6 +11,7 @@ import {
     Paperclip,
     ArrowLeft
 } from 'lucide-react'
+import { useToast } from '../../../common/contexts/useToast' // 1. Imported the custom hook
 
 const MOCK_SESSIONS = [
     { id: 'chat-1', userName: 'Rahul Kumar', lastMessage: 'Is my passport ready?', time: '10:30 AM', unread: 2, status: 'online' },
@@ -23,6 +24,8 @@ export default function LiveChat() {
     const [messageText, setMessageText] = useState('')
     const [isConnected, setIsConnected] = useState(false)
     const [isMobileChatOpen, setIsMobileChatOpen] = useState(false)
+
+    const toast = useToast() // 2. Initialized the toast hook
 
     const pingIntervalRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -44,7 +47,10 @@ export default function LiveChat() {
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault()
         if (!messageText.trim()) return
-        alert(`Message sent: ${messageText}`)
+
+        // 3. REPLACED alert() WITH TOAST
+        toast.success(`Message sent: ${messageText}`)
+
         setMessageText('')
     }
 
@@ -90,8 +96,8 @@ export default function LiveChat() {
                                 setIsMobileChatOpen(true)
                             }}
                             className={`p-4 border-b border-slate-50 cursor-pointer transition-colors ${activeChatId === session.id
-                                    ? 'bg-primary-50 border-l-4 border-l-primary-500'
-                                    : 'border-l-4 border-l-transparent hover:bg-slate-50'
+                                ? 'bg-primary-50 border-l-4 border-l-primary-500'
+                                : 'border-l-4 border-l-transparent hover:bg-slate-50'
                                 }`}
                         >
                             <div className="flex justify-between items-start mb-1">
@@ -147,8 +153,8 @@ export default function LiveChat() {
                             </h2>
                             <p
                                 className={`text-xs font-medium ${activeSession?.status === 'online'
-                                        ? 'text-green-600'
-                                        : 'text-slate-400'
+                                    ? 'text-green-600'
+                                    : 'text-slate-400'
                                     }`}
                             >
                                 {activeSession?.status === 'online' ? 'Online' : 'Offline'}
