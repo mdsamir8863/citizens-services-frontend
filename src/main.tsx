@@ -6,13 +6,16 @@ import { store } from './app/store' // Store import kiya
 import { router } from './router'
 import './index.css'
 import { ToastProvider } from './common/contexts/ToastContext'
+import { ConfirmProvider } from './common/contexts/ConfirmContext'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-      <ToastProvider>
-        <RouterProvider router={router} />
-      </ToastProvider>
+      <ConfirmProvider>
+        <ToastProvider>
+          <RouterProvider router={router} />
+        </ToastProvider>
+      </ConfirmProvider>
     </Provider>
   </StrictMode>,
 )
