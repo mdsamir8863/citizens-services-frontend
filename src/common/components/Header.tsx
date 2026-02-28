@@ -1,11 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { Search, User, Settings, LogOut, Sun, Moon, Menu } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { logOut } from '../../features/auth/authSlice'
 import NotificationBell from './NotificationBell'
+import { ROLES } from '../../features/auth/types' // Using our strict domain constants
 
-const Header = React.memo(() => {
+// Added the prop to control the mobile sidebar
+interface HeaderProps {
+    toggleMobileSidebar: () => void
+}
+
+const Header = React.memo(({ toggleMobileSidebar }: HeaderProps) => {
     const { user } = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
@@ -21,11 +27,11 @@ const Header = React.memo(() => {
         }
     }, [])
 
-    // Global Theme Toggle Function
-    const toggleTheme = () => {
+    // Global Theme Toggle Function (Memoized)
+    const toggleTheme = useCallback(() => {
         document.documentElement.classList.toggle('dark')
-        setIsDarkMode(!isDarkMode)
-    }
+        setIsDarkMode((prev) => !prev)
+    }, [])
 
     // Close dropdown on outside click
     useEffect(() => {
@@ -38,23 +44,27 @@ const Header = React.memo(() => {
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
-    const handleLogout = () => {
+    // Logout Function (Memoized)
+    const handleLogout = useCallback(() => {
         dispatch(logOut())
         navigate('/login', { replace: true })
-    }
+    }, [dispatch, navigate])
 
     return (
         <header className="h-16 bg-white shadow-sm border-b border-slate-100 flex items-center justify-between px-4 sm:px-8 z-30 sticky top-0 transition-colors duration-300">
 
             {/* Left Side: Mobile Menu & Search */}
-            <div className="flex items-center gap-4">
-                {/* Hamburger Menu (Visible only on Mobile) */}
-                <button className="p-2 text-slate-500 hover:text-primary-600 md:hidden transition-colors cursor-pointer">
+            <div className="flex items-center gap-3 sm:gap-4">
+                {/* Hamburger Menu (Visible only on Mobile <= md screens) */}
+                <button
+                    onClick={toggleMobileSidebar}
+                    className="p-2 -ml-2 text-slate-500 hover:bg-slate-50 hover:text-primary-600 rounded-md md:hidden transition-colors cursor-pointer"
+                >
                     <Menu className="w-6 h-6" />
                 </button>
 
-                {/* Global Search (Hidden on Mobile) */}
-                <div className="hidden md:flex items-center w-72 lg:w-96 relative">
+                {/* Global Search (Hidden on Mobile, visible on md and up) */}
+                <div className="hidden md:flex items-center w-64 lg:w-96 relative">
                     <Search className="w-4 h-4 text-slate-400 absolute left-3" />
                     <input
                         type="text"
@@ -79,14 +89,16 @@ const Header = React.memo(() => {
                 {/* Notifications Bell */}
                 <NotificationBell />
 
+                {/* Vertical Divider (Hidden on very small screens) */}
                 <div className="h-8 w-px bg-slate-200 hidden sm:block"></div>
 
                 {/* Profile Dropdown */}
                 <div className="relative" ref={dropdownRef}>
                     <div
-                        className="flex items-center gap-3 cursor-pointer group"
+                        className="flex items-center gap-2 sm:gap-3 cursor-pointer group"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     >
+                        {/* Admin Details (Hidden on mobile to save space) */}
                         <div className="text-right hidden md:block">
                             <p className="text-sm font-bold text-slate-800 group-hover:text-primary-600 transition-colors">
                                 {user?.adminRole || 'Administrator'}
@@ -96,18 +108,22 @@ const Header = React.memo(() => {
                             </p>
                         </div>
 
-                        <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center font-bold shadow-inner border border-primary-200 group-hover:bg-primary-500 group-hover:text-white transition-colors">
+                        {/* Avatar Badge */}
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center font-bold shadow-inner border border-primary-200 group-hover:bg-primary-500 group-hover:text-white transition-colors">
                             {user?.adminRole ? user.adminRole.charAt(0) : 'A'}
                         </div>
                     </div>
 
-                    {/* Dropdown Menu */}
+                    {/* Dropdown Menu (Responsive positioning) */}
                     {isDropdownOpen && (
                         <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+
+                            {/* Mobile-only User Info inside dropdown */}
                             <div className="p-4 border-b border-slate-50 bg-slate-50/50 md:hidden">
                                 <p className="text-sm font-bold text-slate-800">{user?.adminRole}</p>
                                 <p className="text-xs text-slate-500 truncate">{user?.email}</p>
                             </div>
+
                             <div className="p-2">
                                 <Link
                                     to="/profile"
@@ -117,7 +133,8 @@ const Header = React.memo(() => {
                                     <User className="w-4 h-4" /> My Profile
                                 </Link>
 
-                                {user?.adminRole === 'Super Admin' && (
+                                {/* Strict Role Check for Settings */}
+                                {user?.adminRole === ROLES.SUPER_ADMIN && (
                                     <Link
                                         to="/settings"
                                         onClick={() => setIsDropdownOpen(false)}
@@ -127,6 +144,7 @@ const Header = React.memo(() => {
                                     </Link>
                                 )}
                             </div>
+
                             <div className="p-2 border-t border-slate-50">
                                 <button
                                     onClick={handleLogout}

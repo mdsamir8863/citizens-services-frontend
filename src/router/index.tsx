@@ -3,7 +3,8 @@ import { Suspense, lazy } from 'react'
 import AdminLayout from '../layouts/AdminLayout'
 import ProtectedRoute from '../core/guards/ProtectedRoute'
 import RequireRole from '@/core/guards/RequireRole'
-
+import { ROLES } from '../features/auth/types' // Import domain constants
+import GlobalError from '../pages/GlobalError' // 1. IMPORT GLOBAL ERROR PAGE
 
 // Dynamic Code Splitting for performance
 const AdminProfile = lazy(() => import('@/features/profile/pages/AdminProfile'))
@@ -33,11 +34,13 @@ export const router = createBrowserRouter([
                 <LoginView />
             </Suspense>
         ),
+        errorElement: <GlobalError />, // 2. CATCHES ERRORS ON LOGIN PAGE
     },
     {
         // Protected Admin Routes
         path: '/',
         element: <ProtectedRoute />,
+        errorElement: <GlobalError />, // 3. CATCHES ERRORS IN THE ENTIRE DASHBOARD
         children: [
             {
                 path: '/',
@@ -105,7 +108,8 @@ export const router = createBrowserRouter([
                         ),
                     },
                     {
-                        element: <RequireRole allowedRoles={['Super Admin']} />, // Only Super Admins can pass this guard
+                        // STRICT ROLE GUARD USING CONSTANTS
+                        element: <RequireRole allowedRoles={[ROLES.SUPER_ADMIN]} />,
                         children: [
                             {
                                 path: 'settings',

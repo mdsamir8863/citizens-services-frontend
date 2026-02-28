@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
+import { Role } from '../../features/auth/types' // Import the strict Role type
 
 interface RequireRoleProps {
-    allowedRoles: string[]
+    allowedRoles: Role[] // Enforce strict typing here
 }
 
 export default function RequireRole({ allowedRoles }: RequireRoleProps) {
@@ -13,6 +14,6 @@ export default function RequireRole({ allowedRoles }: RequireRoleProps) {
         return <Navigate to="/" replace />
     }
 
-    // If they are authorized, render the settings page
+    // If they are authorized, render the nested child routes
     return <Outlet />
 }

@@ -39,7 +39,7 @@ export default function TicketDetail() {
 
     if (isLoading) {
         return (
-            <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
+            <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
             </div>
         )
@@ -47,8 +47,8 @@ export default function TicketDetail() {
 
     if (!ticket) {
         return (
-            <div className="flex flex-col h-[calc(100vh-4rem)] items-center justify-center text-slate-500">
-                <h2 className="text-2xl font-bold mb-2">Ticket Not Found</h2>
+            <div className="flex flex-col min-h-[calc(100vh-4rem)] items-center justify-center text-slate-500 px-4 text-center">
+                <h2 className="text-xl sm:text-2xl font-bold mb-2">Ticket Not Found</h2>
                 <button
                     onClick={() => navigate('/complaints')}
                     className="text-primary-600 hover:underline"
@@ -60,52 +60,54 @@ export default function TicketDetail() {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] bg-slate-50 transition-colors duration-300">
+        <div className="flex flex-col xl:flex-row min-h-[calc(100vh-4rem)] bg-slate-50">
 
             {/* LEFT PANE */}
-            <div className="flex-1 flex flex-col border-r border-slate-200 bg-white transition-colors duration-300">
+            <div className="flex-1 flex flex-col border-r border-slate-200 bg-white">
 
                 {/* Header */}
-                <div className="p-4 border-b border-slate-100 flex items-center justify-between z-10">
-                    <div className="flex items-center gap-4">
+                <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-start sm:items-center gap-4">
                         <button
                             onClick={() => navigate('/complaints')}
                             className="p-2 bg-slate-100 hover:bg-slate-200 rounded-full transition-colors"
                         >
                             <ArrowLeft className="w-4 h-4 text-slate-600" />
                         </button>
+
                         <div>
-                            <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <h2 className="text-lg sm:text-xl font-bold text-slate-800 flex flex-wrap items-center gap-2">
                                 {ticket.title}
                                 <span className="px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 rounded-md border border-yellow-200">
                                     {ticket.status}
                                 </span>
                             </h2>
-                            <p className="text-sm text-slate-500 mt-1">
+
+                            <p className="text-xs sm:text-sm text-slate-500 mt-1">
                                 Ticket ID: {ticket.id} • {ticket.category}
                             </p>
                         </div>
                     </div>
 
-                    <button className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold py-2 px-4 rounded-lg transition-colors border border-indigo-200">
+                    <button className="flex items-center justify-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold py-2 px-4 rounded-lg transition-colors border border-indigo-200 w-full sm:w-auto">
                         <Sparkles className="w-4 h-4" />
                         Summarize Ticket
                     </button>
                 </div>
 
                 {/* Timeline */}
-                <div className="flex-1 overflow-y-auto p-6 bg-slate-50 flex items-center justify-center text-slate-400">
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50 flex items-center justify-center text-slate-400 text-center">
                     <p className="text-sm">No message history yet. Ticket just opened.</p>
                 </div>
 
                 {/* Reply Box */}
                 <div className="p-4 bg-white border-t border-slate-200">
-                    <div className="flex items-center gap-4 mb-3">
+                    <div className="flex flex-wrap items-center gap-4 mb-3">
                         <button
                             onClick={() => setReplyType('PUBLIC')}
                             className={`text-sm font-bold pb-1 transition-colors border-b-2 ${replyType === 'PUBLIC'
-                                    ? 'text-primary-600 border-primary-600'
-                                    : 'text-slate-400 border-transparent hover:text-slate-600'
+                                ? 'text-primary-600 border-primary-600'
+                                : 'text-slate-400 border-transparent hover:text-slate-600'
                                 }`}
                         >
                             Public Reply (Citizen)
@@ -114,8 +116,8 @@ export default function TicketDetail() {
                         <button
                             onClick={() => setReplyType('INTERNAL')}
                             className={`text-sm font-bold pb-1 transition-colors border-b-2 flex items-center gap-1 ${replyType === 'INTERNAL'
-                                    ? 'text-yellow-600 border-yellow-600'
-                                    : 'text-slate-400 border-transparent hover:text-slate-600'
+                                ? 'text-yellow-600 border-yellow-600'
+                                : 'text-slate-400 border-transparent hover:text-slate-600'
                                 }`}
                         >
                             <Lock className="w-3 h-3" />
@@ -133,15 +135,15 @@ export default function TicketDetail() {
                                     : 'Type your official response to the citizen...'
                             }
                             className={`w-full p-3 border rounded-lg text-sm focus:outline-none focus:ring-2 transition-all resize-none h-24 ${replyType === 'INTERNAL'
-                                    ? 'bg-yellow-50 border-yellow-200 focus:ring-yellow-500 text-yellow-900 placeholder:text-yellow-700/50'
-                                    : 'bg-slate-50 border-slate-200 focus:ring-primary-500 text-slate-800'
+                                ? 'bg-yellow-50 border-yellow-200 focus:ring-yellow-500 text-yellow-900 placeholder:text-yellow-700/50'
+                                : 'bg-slate-50 border-slate-200 focus:ring-primary-500 text-slate-800'
                                 }`}
                         />
 
-                        <div className="flex justify-between items-center">
+                        <div className="flex flex-col sm:flex-row justify-between gap-3 sm:items-center">
                             <button
                                 type="button"
-                                className="btn-secondary !py-2 !px-3 text-xs"
+                                className="btn-secondary !py-2 !px-3 text-xs flex items-center gap-2"
                             >
                                 <CheckCircle className="w-4 h-4 text-green-600" />
                                 Mark as Resolved
@@ -149,9 +151,9 @@ export default function TicketDetail() {
 
                             <button
                                 type="submit"
-                                className={`flex items-center gap-2 font-bold py-2 px-6 rounded-lg text-white transition-colors shadow-sm ${replyType === 'INTERNAL'
-                                        ? 'bg-yellow-600 hover:bg-yellow-700'
-                                        : 'bg-primary-500 hover:bg-primary-600'
+                                className={`flex items-center justify-center gap-2 font-bold py-2 px-6 rounded-lg text-white transition-colors shadow-sm w-full sm:w-auto ${replyType === 'INTERNAL'
+                                    ? 'bg-yellow-600 hover:bg-yellow-700'
+                                    : 'bg-primary-500 hover:bg-primary-600'
                                     }`}
                             >
                                 {replyType === 'INTERNAL' ? 'Save Note' : 'Send Reply'}
@@ -163,7 +165,9 @@ export default function TicketDetail() {
             </div>
 
             {/* RIGHT PANE */}
-            <TicketSidebar ticket={ticket} />
+            <div className="hidden xl:block xl:w-96">
+                <TicketSidebar ticket={ticket} />
+            </div>
         </div>
     )
 }

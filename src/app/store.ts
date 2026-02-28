@@ -1,14 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '../features/auth/authSlice'
+import { baseApi } from './api/baseApi' // 1. Import our new RTK Query base API
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
-      // Add other reducers here as you create them
-      // For example, if you have a userSlice, you would add it like this:
+        // 2. Add the RTK Query reducer here
+        [baseApi.reducerPath]: baseApi.reducer,
     },
+    // 3. KEEP THIS: Your excellent security practice! 
     devTools: import.meta.env.MODE !== 'production',
-    // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+
+    // 4. UNCOMMENT & UPDATE THIS: Add the RTK Query middleware for caching and fetching
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(baseApi.middleware),
 })
 
 // Types for TypeScript support
